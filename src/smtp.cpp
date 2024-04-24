@@ -191,7 +191,10 @@ string smtp::connect()
 
 void smtp::auth_login(const string& username, const string& password)
 {
-    dlg_->send("AUTH LOGIN");
+	if( username.empty() && password.empty() )
+		return;
+
+	dlg_->send("AUTH LOGIN");
     string line = dlg_->receive();
     tuple<int, bool, string> tokens = parse_line(line);
     if (std::get<1>(tokens) && !positive_intermediate(std::get<0>(tokens)))
